@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    color: #111827;
+    background-color: #F3F4F6;
+  }
+}
+
+/* Visible keyboard focus ring for all interactive elements */
+:focus-visible {
+  outline: 2px solid #1B4FD8;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* CurrencyInput already uses Tailwind's ring utilities — don't double-ring it */
+input:focus-visible {
+  outline: none;
+}
+
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(3px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-slide-in {
+  animation: fadeSlideIn 0.22s ease-out both;
+}

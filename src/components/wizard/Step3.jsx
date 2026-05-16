@@ -48,7 +48,6 @@ export default function Step3({ onNext, onBack }) {
     }
   }
 
-  // Estimate: 12% of basic. Basic ≈ 40% of gross. Gross ≈ take-home * 12 (rough).
   const estimatedMonthlyPF = state.monthlyTakeHome
     ? Math.round(state.monthlyTakeHome * 0.4 * 0.12)
     : null
@@ -60,10 +59,10 @@ export default function Step3({ onNext, onBack }) {
       <ProgressDots current={3} />
 
       <div className="mt-8">
-        <h2 className="text-[28px] font-bold text-neutral-900 leading-tight">
+        <h2 className="text-[28px] font-bold text-neutral-900 dark:text-white leading-tight">
           Does your employer deduct Provident Fund (PF)?
         </h2>
-        <p className="mt-3 text-sm text-neutral-600 leading-relaxed">
+        <p className="mt-3 text-sm text-neutral-600 dark:text-gray-400 leading-relaxed">
           Employee PF contributions count towards your ₹1,50,000 80C limit, reducing Old Regime tax.
         </p>
       </div>
@@ -79,7 +78,7 @@ export default function Step3({ onNext, onBack }) {
 
       {hasPF === true && (
         <div className="mt-7">
-          <label htmlFor="monthly-pf" className="block text-sm font-semibold text-neutral-900 mb-2">
+          <label htmlFor="monthly-pf" className="block text-sm font-semibold text-neutral-900 dark:text-white mb-2">
             Monthly employee PF deduction
           </label>
           <CurrencyInput
@@ -90,9 +89,9 @@ export default function Step3({ onNext, onBack }) {
             autoFocus
           />
           {estimatedMonthlyPF && (
-            <p className="mt-2 text-xs text-neutral-500">
+            <p className="mt-2 text-xs text-neutral-500 dark:text-gray-500">
               Not sure? PF is typically 12% of your basic salary — roughly{' '}
-              <span className="font-medium text-neutral-700">{formatINR(estimatedMonthlyPF)} / month</span> for
+              <span className="font-medium text-neutral-700 dark:text-gray-300">{formatINR(estimatedMonthlyPF)} / month</span> for
               your salary.
             </p>
           )}

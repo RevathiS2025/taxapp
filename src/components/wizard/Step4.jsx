@@ -78,10 +78,10 @@ export default function Step4({ onNext, onBack }) {
       <ProgressDots current={4} />
 
       <div className="mt-8">
-        <h2 className="text-[28px] font-bold text-neutral-900 leading-tight">
+        <h2 className="text-[28px] font-bold text-neutral-900 dark:text-white leading-tight">
           Did you make any 80C investments this year?
         </h2>
-        <p className="mt-3 text-sm text-neutral-600 leading-relaxed">
+        <p className="mt-3 text-sm text-neutral-600 dark:text-gray-400 leading-relaxed">
           These reduce your taxable income under the Old Regime, up to ₹1,50,000 combined (including PF).
         </p>
       </div>
@@ -95,7 +95,7 @@ export default function Step4({ onNext, onBack }) {
                 className={`w-5 h-5 rounded flex-shrink-0 border-2 flex items-center justify-center transition-colors cursor-pointer ${
                   checked[key]
                     ? 'bg-primary border-primary'
-                    : 'border-neutral-300 group-hover:border-primary bg-white'
+                    : 'border-neutral-300 dark:border-gray-600 group-hover:border-primary bg-white dark:bg-gray-700'
                 }`}
               >
                 {checked[key] && (
@@ -106,7 +106,7 @@ export default function Step4({ onNext, onBack }) {
               </div>
               <span
                 onClick={() => toggleItem(key)}
-                className={`text-sm ${checked[key] ? 'font-semibold text-neutral-900' : 'text-neutral-600'}`}
+                className={`text-sm ${checked[key] ? 'font-semibold text-neutral-900 dark:text-white' : 'text-neutral-600 dark:text-gray-400'}`}
               >
                 {label}
               </span>
@@ -127,20 +127,20 @@ export default function Step4({ onNext, onBack }) {
 
       {/* Running total */}
       {(investmentsTotal > 0 || pfAnnual > 0) && (
-        <div className={`mt-6 rounded-xl px-4 py-4 text-sm space-y-1.5 ${atCap ? 'bg-warning/10 border border-warning/30' : 'bg-neutral-100'}`}>
+        <div className={`mt-6 rounded-xl px-4 py-4 text-sm space-y-1.5 ${atCap ? 'bg-warning/10 border border-warning/30' : 'bg-neutral-100 dark:bg-gray-700'}`}>
           {investmentsTotal > 0 && (
-            <div className="flex justify-between text-neutral-600">
+            <div className="flex justify-between text-neutral-600 dark:text-gray-400">
               <span>80C investments entered</span>
               <span className="tabular-nums font-medium">{formatINR(investmentsTotal)}</span>
             </div>
           )}
           {pfAnnual > 0 && (
-            <div className="flex justify-between text-neutral-600">
+            <div className="flex justify-between text-neutral-600 dark:text-gray-400">
               <span>PF contribution (annual)</span>
               <span className="tabular-nums font-medium">{formatINR(pfAnnual)}</span>
             </div>
           )}
-          <div className="border-t border-neutral-300 pt-1.5 flex justify-between font-semibold text-neutral-900">
+          <div className="border-t border-neutral-300 dark:border-gray-600 pt-1.5 flex justify-between font-semibold text-neutral-900 dark:text-white">
             <span>Effective 80C deduction {atCap && <span className="text-warning">(capped)</span>}</span>
             <span className="tabular-nums">{formatINR(effective)}</span>
           </div>

@@ -53,10 +53,10 @@ export default function Step9({ onNext, onBack }) {
       <ProgressDots current={9} />
 
       <div className="mt-8">
-        <h2 className="text-[28px] font-bold text-neutral-900 leading-tight">
+        <h2 className="text-[28px] font-bold text-neutral-900 dark:text-white leading-tight">
           What is your age group?
         </h2>
-        <p className="mt-3 text-sm text-neutral-600 leading-relaxed">
+        <p className="mt-3 text-sm text-neutral-600 dark:text-gray-400 leading-relaxed">
           Age determines your tax slab thresholds under the Old Regime.
         </p>
       </div>
@@ -69,14 +69,14 @@ export default function Step9({ onNext, onBack }) {
             onClick={() => update({ age: value })}
             className={`w-full text-left px-5 py-4 rounded-xl border-2 transition-colors ${
               selected === value
-                ? 'border-primary bg-primary-light'
-                : 'border-neutral-200 bg-white hover:border-primary/50'
+                ? 'border-primary bg-primary-light dark:bg-primary/10'
+                : 'border-neutral-200 dark:border-gray-700 bg-white dark:bg-gray-700 hover:border-primary/50'
             }`}
           >
-            <p className={`text-sm font-semibold ${selected === value ? 'text-primary' : 'text-neutral-900'}`}>
+            <p className={`text-sm font-semibold ${selected === value ? 'text-primary' : 'text-neutral-900 dark:text-white'}`}>
               {label}
             </p>
-            <p className="text-xs text-neutral-500 mt-1 leading-relaxed">{description}</p>
+            <p className="text-xs text-neutral-500 dark:text-gray-400 mt-1 leading-relaxed">{description}</p>
           </button>
         ))}
       </div>

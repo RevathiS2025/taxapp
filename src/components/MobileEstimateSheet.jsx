@@ -16,7 +16,6 @@ export default function MobileEstimateSheet() {
     return () => clearTimeout(timer)
   }, [state])
 
-  // Lock body scroll when sheet is open
   useEffect(() => {
     if (open) {
       document.body.style.overflow = 'hidden'
@@ -25,7 +24,6 @@ export default function MobileEstimateSheet() {
     }
   }, [open])
 
-  // Close on Escape key
   useEffect(() => {
     const handler = (e) => { if (e.key === 'Escape') setOpen(false) }
     document.addEventListener('keydown', handler)
@@ -40,7 +38,7 @@ export default function MobileEstimateSheet() {
   return (
     <>
       {/* Sticky bottom bar — mobile only */}
-      <div className="lg:hidden fixed bottom-0 inset-x-0 z-30 bg-white border-t border-neutral-200 shadow-[0_-2px_12px_rgba(0,0,0,0.08)]">
+      <div className="lg:hidden fixed bottom-0 inset-x-0 z-30 bg-white dark:bg-gray-800 border-t border-neutral-200 dark:border-gray-700 shadow-[0_-2px_12px_rgba(0,0,0,0.08)]">
         <button
           type="button"
           onClick={() => setOpen(true)}
@@ -49,12 +47,12 @@ export default function MobileEstimateSheet() {
           className="w-full flex items-center justify-between px-4 py-3"
         >
           <div className="text-left">
-            <p className="text-[11px] text-neutral-500 leading-none mb-0.5">
+            <p className="text-[11px] text-neutral-500 dark:text-gray-500 leading-none mb-0.5">
               {winner === 'new' ? 'New Regime wins' : winner === 'old' ? 'Old Regime wins' : 'Both equal'} · est. annual tax
             </p>
-            <p className="text-base font-bold text-neutral-900 tabular-nums leading-tight">
+            <p className="text-base font-bold text-neutral-900 dark:text-white tabular-nums leading-tight">
               {formatINR(bestTax)}
-              <span className="text-xs text-neutral-500 font-normal"> / yr</span>
+              <span className="text-xs text-neutral-500 dark:text-gray-500 font-normal"> / yr</span>
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -68,7 +66,7 @@ export default function MobileEstimateSheet() {
               </span>
             )}
             <svg
-              className="w-4 h-4 text-neutral-400"
+              className="w-4 h-4 text-neutral-400 dark:text-gray-500"
               fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor"
               aria-hidden="true"
             >
@@ -92,19 +90,19 @@ export default function MobileEstimateSheet() {
         role="dialog"
         aria-modal="true"
         aria-label="Live tax estimate details"
-        className={`lg:hidden fixed bottom-0 inset-x-0 z-50 bg-white rounded-t-2xl shadow-[0_-4px_24px_rgba(0,0,0,0.12)] transition-transform duration-300 ease-out ${
+        className={`lg:hidden fixed bottom-0 inset-x-0 z-50 bg-white dark:bg-gray-800 rounded-t-2xl shadow-[0_-4px_24px_rgba(0,0,0,0.12)] transition-transform duration-300 ease-out ${
           open ? 'translate-y-0' : 'translate-y-full'
         }`}
       >
         {/* Drag handle + close */}
-        <div className="relative flex items-center justify-center pt-3 pb-2 border-b border-neutral-100">
-          <div className="w-10 h-1 rounded-full bg-neutral-200" aria-hidden="true" />
+        <div className="relative flex items-center justify-center pt-3 pb-2 border-b border-neutral-100 dark:border-gray-700">
+          <div className="w-10 h-1 rounded-full bg-neutral-200 dark:bg-gray-600" aria-hidden="true" />
           <button
             ref={closeRef}
             type="button"
             onClick={() => setOpen(false)}
             aria-label="Close estimate sheet"
-            className="absolute right-4 w-8 h-8 flex items-center justify-center rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-500 transition-colors"
+            className="absolute right-4 w-8 h-8 flex items-center justify-center rounded-full bg-neutral-100 dark:bg-gray-700 hover:bg-neutral-200 dark:hover:bg-gray-600 text-neutral-500 dark:text-gray-400 transition-colors"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -112,7 +110,7 @@ export default function MobileEstimateSheet() {
           </button>
         </div>
 
-        {/* Content — render LivePreview without its card wrapper */}
+        {/* Content */}
         <div className="overflow-y-auto max-h-[70vh] p-4 pb-8">
           <LivePreview noCard />
         </div>

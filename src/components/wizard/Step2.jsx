@@ -56,10 +56,10 @@ export default function Step2({ onNext, onBack }) {
       <ProgressDots current={2} />
 
       <div className="mt-8">
-        <h2 className="text-[28px] font-bold text-neutral-900 leading-tight">
+        <h2 className="text-[28px] font-bold text-neutral-900 dark:text-white leading-tight">
           Do you pay rent?
         </h2>
-        <p className="mt-3 text-sm text-neutral-600 leading-relaxed">
+        <p className="mt-3 text-sm text-neutral-600 dark:text-gray-400 leading-relaxed">
           If you receive HRA from your employer, entering your rent can reduce taxable income under the Old Regime.
         </p>
       </div>
@@ -76,7 +76,7 @@ export default function Step2({ onNext, onBack }) {
       {paysRent === true && (
         <div className="mt-7 space-y-6">
           <div>
-            <label htmlFor="monthly-rent" className="block text-sm font-semibold text-neutral-900 mb-2">
+            <label htmlFor="monthly-rent" className="block text-sm font-semibold text-neutral-900 dark:text-white mb-2">
               Monthly rent
             </label>
             <CurrencyInput
@@ -89,7 +89,7 @@ export default function Step2({ onNext, onBack }) {
           </div>
 
           <div>
-            <p className="text-sm font-semibold text-neutral-900 mb-3">Which city do you live in?</p>
+            <p className="text-sm font-semibold text-neutral-900 dark:text-white mb-3">Which city do you live in?</p>
             <div className="flex gap-3 flex-wrap">
               <PillButton active={state.city === 'metro'} onClick={() => update({ city: 'metro' })}>
                 Metro city
@@ -98,7 +98,7 @@ export default function Step2({ onNext, onBack }) {
                 Other city
               </PillButton>
             </div>
-            <p className="mt-2 text-xs text-neutral-500">
+            <p className="mt-2 text-xs text-neutral-500 dark:text-gray-500">
               Metro: Mumbai, Delhi, Kolkata, Chennai
             </p>
           </div>

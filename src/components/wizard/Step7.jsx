@@ -66,13 +66,11 @@ export default function Step7({ onNext, onBack }) {
   const showEmployer = npsOption === 'employer' || npsOption === 'both'
   const showSelf     = npsOption === 'self'     || npsOption === 'both'
 
-  // Employer NPS cap warning: 14% of estimated basic monthly
   const { basicSalary } = reconstructGross(state)
   const basicMonthly = basicSalary / 12
   const maxEmployerMonthly = Math.round(basicMonthly * 0.14)
   const employerExceedsCap = state.npsEmployerMonthly > maxEmployerMonthly && maxEmployerMonthly > 0
 
-  // Employee NPS cap: ₹50,000/year = ₹4,167/month
   const employeeExceedsCap = (state.npsEmployeeMonthly || 0) * 12 > 50000
 
   const isValid = npsOption !== null
@@ -82,10 +80,10 @@ export default function Step7({ onNext, onBack }) {
       <ProgressDots current={7} />
 
       <div className="mt-8">
-        <h2 className="text-[28px] font-bold text-neutral-900 leading-tight">
+        <h2 className="text-[28px] font-bold text-neutral-900 dark:text-white leading-tight">
           Does anyone contribute to NPS on your behalf?
         </h2>
-        <p className="mt-3 text-sm text-neutral-600 leading-relaxed">
+        <p className="mt-3 text-sm text-neutral-600 dark:text-gray-400 leading-relaxed">
           NPS contributions get special deductions in both regimes — employer contributions via 80CCD(2) are available in both; employee contributions via 80CCD(1B) only in the Old Regime.
         </p>
       </div>
@@ -101,10 +99,10 @@ export default function Step7({ onNext, onBack }) {
       <div className="mt-7 space-y-6">
         {showEmployer && (
           <div>
-            <label htmlFor="nps-employer" className="block text-sm font-semibold text-neutral-900 mb-1">
+            <label htmlFor="nps-employer" className="block text-sm font-semibold text-neutral-900 dark:text-white mb-1">
               Employer's monthly NPS contribution
             </label>
-            <p className="text-xs text-neutral-500 mb-2">
+            <p className="text-xs text-neutral-500 dark:text-gray-500 mb-2">
               80CCD(2): deductible in both regimes — up to 14% of basic (New) or 10% of basic (Old)
             </p>
             <CurrencyInput
@@ -124,10 +122,10 @@ export default function Step7({ onNext, onBack }) {
 
         {showSelf && (
           <div>
-            <label htmlFor="nps-self" className="block text-sm font-semibold text-neutral-900 mb-1">
+            <label htmlFor="nps-self" className="block text-sm font-semibold text-neutral-900 dark:text-white mb-1">
               Your monthly NPS contribution
             </label>
-            <p className="text-xs text-neutral-500 mb-2">
+            <p className="text-xs text-neutral-500 dark:text-gray-500 mb-2">
               80CCD(1B): up to ₹50,000/year extra deduction — Old Regime only
             </p>
             <CurrencyInput

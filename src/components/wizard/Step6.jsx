@@ -55,10 +55,10 @@ export default function Step6({ onNext, onBack }) {
       <ProgressDots current={6} />
 
       <div className="mt-8">
-        <h2 className="text-[28px] font-bold text-neutral-900 leading-tight">
+        <h2 className="text-[28px] font-bold text-neutral-900 dark:text-white leading-tight">
           Do you have a home loan?
         </h2>
-        <p className="mt-3 text-sm text-neutral-600 leading-relaxed">
+        <p className="mt-3 text-sm text-neutral-600 dark:text-gray-400 leading-relaxed">
           Under the Old Regime, home loan interest (Section 24b) gives up to ₹2,00,000 deduction, and principal repayment goes into your ₹1,50,000 80C pool.
         </p>
       </div>
@@ -75,10 +75,10 @@ export default function Step6({ onNext, onBack }) {
       {hasHomeLoan === true && (
         <div className="mt-7 space-y-6">
           <div>
-            <label htmlFor="loan-interest" className="block text-sm font-semibold text-neutral-900 mb-1">
+            <label htmlFor="loan-interest" className="block text-sm font-semibold text-neutral-900 dark:text-white mb-1">
               Annual home loan interest paid
             </label>
-            <p className="text-xs text-neutral-500 mb-2">
+            <p className="text-xs text-neutral-500 dark:text-gray-500 mb-2">
               Section 24(b) — deductible up to ₹2,00,000 for self-occupied property
             </p>
             <CurrencyInput
@@ -96,10 +96,10 @@ export default function Step6({ onNext, onBack }) {
           </div>
 
           <div>
-            <label htmlFor="loan-principal" className="block text-sm font-semibold text-neutral-900 mb-1">
+            <label htmlFor="loan-principal" className="block text-sm font-semibold text-neutral-900 dark:text-white mb-1">
               Annual principal repayment
             </label>
-            <p className="text-xs text-neutral-500 mb-2">
+            <p className="text-xs text-neutral-500 dark:text-gray-500 mb-2">
               Goes into your 80C pool (combined with PF and investments, capped at ₹1,50,000)
             </p>
             <CurrencyInput

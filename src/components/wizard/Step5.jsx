@@ -71,10 +71,10 @@ export default function Step5({ onNext, onBack }) {
       <ProgressDots current={5} />
 
       <div className="mt-8">
-        <h2 className="text-[28px] font-bold text-neutral-900 leading-tight">
+        <h2 className="text-[28px] font-bold text-neutral-900 dark:text-white leading-tight">
           Do you pay health insurance premiums?
         </h2>
-        <p className="mt-3 text-sm text-neutral-600 leading-relaxed">
+        <p className="mt-3 text-sm text-neutral-600 dark:text-gray-400 leading-relaxed">
           Health insurance premiums qualify for an 80D deduction under the Old Regime — up to ₹25,000 for self, and up to ₹50,000 for senior parents.
         </p>
       </div>
@@ -91,10 +91,10 @@ export default function Step5({ onNext, onBack }) {
       {hasInsurance === true && (
         <div className="mt-7 space-y-6">
           <div>
-            <label htmlFor="insurance-self" className="block text-sm font-semibold text-neutral-900 mb-1">
+            <label htmlFor="insurance-self" className="block text-sm font-semibold text-neutral-900 dark:text-white mb-1">
               Annual premium for self, spouse &amp; children
             </label>
-            <p className="text-xs text-neutral-500 mb-2">Deductible up to ₹25,000 per year</p>
+            <p className="text-xs text-neutral-500 dark:text-gray-500 mb-2">Deductible up to ₹25,000 per year</p>
             <CurrencyInput
               id="insurance-self"
               value={state.healthInsuranceSelf > 0 ? state.healthInsuranceSelf : null}
@@ -105,7 +105,7 @@ export default function Step5({ onNext, onBack }) {
           </div>
 
           <div>
-            <p className="text-sm font-semibold text-neutral-900 mb-3">
+            <p className="text-sm font-semibold text-neutral-900 dark:text-white mb-3">
               Do you also pay for your parents' health insurance?
             </p>
             <div className="flex gap-3 flex-wrap">
@@ -121,10 +121,10 @@ export default function Step5({ onNext, onBack }) {
           {coversParents === true && (
             <div className="space-y-4">
               <div>
-                <label htmlFor="insurance-parents" className="block text-sm font-semibold text-neutral-900 mb-1">
+                <label htmlFor="insurance-parents" className="block text-sm font-semibold text-neutral-900 dark:text-white mb-1">
                   Annual premium for parents
                 </label>
-                <p className="text-xs text-neutral-500 mb-2">
+                <p className="text-xs text-neutral-500 dark:text-gray-500 mb-2">
                   Deductible up to ₹25,000 (₹50,000 if parents are senior citizens)
                 </p>
                 <CurrencyInput
@@ -136,7 +136,7 @@ export default function Step5({ onNext, onBack }) {
               </div>
 
               <div>
-                <p className="text-sm font-semibold text-neutral-900 mb-3">
+                <p className="text-sm font-semibold text-neutral-900 dark:text-white mb-3">
                   Are your parents senior citizens (60+)?
                 </p>
                 <div className="flex gap-3 flex-wrap">

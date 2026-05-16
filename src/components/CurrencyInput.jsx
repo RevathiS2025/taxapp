@@ -15,7 +15,6 @@ export default function CurrencyInput({
   const [display, setDisplay] = useState(value != null ? formatIN(value) : '')
   const inputRef = useRef(null)
 
-  // Sync display when parent changes the value externally (back navigation, reset)
   useEffect(() => {
     const displayNum = display.replace(/[^0-9]/g, '')
       ? parseInt(display.replace(/[^0-9]/g, ''), 10)
@@ -31,7 +30,6 @@ export default function CurrencyInput({
     const cursorPos = input.selectionStart
     const rawValue = input.value
 
-    // Count digits before cursor so we can restore cursor after re-formatting
     const digitsBefore = rawValue.slice(0, cursorPos).replace(/[^0-9]/g, '').length
 
     const digits = rawValue.replace(/[^0-9]/g, '')
@@ -46,7 +44,6 @@ export default function CurrencyInput({
     setDisplay(formatted)
     onChange(num)
 
-    // Restore cursor to the position of the digitsBefore-th digit
     requestAnimationFrame(() => {
       if (!inputRef.current) return
       if (digitsBefore === 0) {
@@ -71,7 +68,7 @@ export default function CurrencyInput({
   return (
     <div className="relative">
       <span
-        className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-600 font-medium select-none pointer-events-none"
+        className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-600 dark:text-gray-400 font-medium select-none pointer-events-none"
         aria-hidden="true"
       >
         ₹
@@ -85,7 +82,7 @@ export default function CurrencyInput({
         onChange={handleChange}
         placeholder={placeholder}
         autoFocus={autoFocus}
-        className={`w-full h-[52px] pl-8 pr-4 border-[1.5px] border-neutral-300 rounded-lg text-neutral-900 font-medium placeholder:text-neutral-300 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 transition-colors ${className}`}
+        className={`w-full h-[52px] pl-8 pr-4 border-[1.5px] border-neutral-300 dark:border-gray-600 rounded-lg text-neutral-900 dark:text-white bg-white dark:bg-gray-700 font-medium placeholder:text-neutral-300 dark:placeholder:text-gray-600 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 transition-colors ${className}`}
       />
     </div>
   )

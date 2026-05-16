@@ -47,16 +47,16 @@ export default function Step1({ onNext, onBack }) {
       <ProgressDots current={1} />
 
       <div className="mt-8">
-        <h2 className="text-[28px] font-bold text-neutral-900 leading-tight">
+        <h2 className="text-[28px] font-bold text-neutral-900 dark:text-white leading-tight">
           How much do you receive in your bank account every month?
         </h2>
-        <p className="mt-3 text-sm text-neutral-600 leading-relaxed">
+        <p className="mt-3 text-sm text-neutral-600 dark:text-gray-400 leading-relaxed">
           This is your in-hand salary — after your company deducts PF, TDS, professional tax, and any other deductions.
         </p>
       </div>
 
       <div className="mt-7">
-        <label htmlFor="monthly-takehome" className="block text-sm font-semibold text-neutral-900 mb-2">
+        <label htmlFor="monthly-takehome" className="block text-sm font-semibold text-neutral-900 dark:text-white mb-2">
           Monthly take-home salary
         </label>
         <CurrencyInput

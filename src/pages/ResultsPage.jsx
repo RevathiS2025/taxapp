@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTax } from '../context/TaxContext'
 import { computeTax, formatINR } from '../engine/taxEngine'
+import ThemeToggle from '../components/ThemeToggle'
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -32,7 +33,6 @@ function getSuggestions(result, state) {
   const { newRegime: nr, oldRegime: or, winner } = result
   const list = []
 
-  // 1 — 80C gap (old regime winner or very close)
   if (winner === 'old' || nr.totalTax - or.totalTax < 10000) {
     const used80C = (state.pfDeductedMonthly || 0) * 12 + (state.investments80C || 0) + (state.homeLoanPrincipal || 0)
     const gap = 150000 - used80C
@@ -47,7 +47,6 @@ function getSuggestions(result, state) {
     }
   }
 
-  // 2 — NPS benefit (old regime winner, no employee NPS yet)
   if (winner === 'old' && or.deduction80CCD1B === 0) {
     const marginalRate = or.slabBreakdown.length > 0 ? or.slabBreakdown[or.slabBreakdown.length - 1].rate : 0
     if (marginalRate > 0) {
@@ -60,7 +59,6 @@ function getSuggestions(result, state) {
     }
   }
 
-  // 3 — Pays rent but new regime still wins
   if ((state.monthlyRent || 0) > 0 && winner === 'new') {
     list.push(
       "You pay rent but the HRA benefit under the Old Regime isn't enough to beat the New Regime. " +
@@ -68,7 +66,6 @@ function getSuggestions(result, state) {
     )
   }
 
-  // 4 — No health insurance
   if (!state.healthInsuranceSelf) {
     list.push(
       'You haven\'t entered a health insurance premium. Beyond the 80D tax benefit under the Old Regime ' +
@@ -77,7 +74,6 @@ function getSuggestions(result, state) {
     )
   }
 
-  // 5 — Regimes are very close
   if (Math.abs(or.totalTax - nr.totalTax) < 5000 && Math.abs(or.totalTax - nr.totalTax) >= 0) {
     list.push(
       `The difference between both regimes is just ${formatINR(Math.abs(or.totalTax - nr.totalTax))}. ` +
@@ -85,7 +81,6 @@ function getSuggestions(result, state) {
     )
   }
 
-  // 6 — New regime winner but no employer NPS
   if (winner === 'new' && !state.npsEmployerMonthly) {
     list.push(
       'Ask your HR if they offer an NPS co-contribution option. Under the New Regime, ' +
@@ -117,64 +112,66 @@ function getTopDeductions(or) {
 
 function SlabTable({ title, accent, slabBreakdown, rawTax, rebate, effectiveTax, cess, totalTax, monthlyTax }) {
   const marginalRelief = rebate === 0 && effectiveTax < rawTax ? rawTax - effectiveTax : 0
-  const headerColor = accent === 'success' ? 'bg-success-light border-success/30 text-success' : 'bg-primary-light border-primary/30 text-primary'
+  const headerColor = accent === 'success'
+    ? 'bg-success-light border-success/30 text-success'
+    : 'bg-primary-light border-primary/30 text-primary'
 
   return (
-    <div className="bg-white rounded-2xl border border-neutral-300 shadow-panel overflow-hidden">
-      <div className={`px-5 py-3 border-b border-neutral-300 ${headerColor}`}>
+    <div className="bg-white dark:bg-gray-800 rounded-2xl border border-neutral-300 dark:border-gray-700 shadow-panel overflow-hidden">
+      <div className={`px-5 py-3 border-b border-neutral-300 dark:border-gray-700 ${headerColor}`}>
         <p className="text-sm font-semibold">{title}</p>
       </div>
       <table className="w-full text-xs">
         <thead>
-          <tr className="bg-neutral-100 border-b border-neutral-200">
-            <th className="text-left px-4 py-2 font-semibold text-neutral-500 uppercase tracking-wide">Slab</th>
-            <th className="text-right px-3 py-2 font-semibold text-neutral-500 uppercase tracking-wide">Rate</th>
-            <th className="text-right px-4 py-2 font-semibold text-neutral-500 uppercase tracking-wide">Tax</th>
+          <tr className="bg-neutral-100 dark:bg-gray-700 border-b border-neutral-200 dark:border-gray-600">
+            <th className="text-left px-4 py-2 font-semibold text-neutral-500 dark:text-gray-400 uppercase tracking-wide">Slab</th>
+            <th className="text-right px-3 py-2 font-semibold text-neutral-500 dark:text-gray-400 uppercase tracking-wide">Rate</th>
+            <th className="text-right px-4 py-2 font-semibold text-neutral-500 dark:text-gray-400 uppercase tracking-wide">Tax</th>
           </tr>
         </thead>
         <tbody>
           {slabBreakdown.length === 0 ? (
             <tr>
-              <td colSpan={3} className="px-4 py-3 text-neutral-500 text-center">Taxable income is ₹0 — no tax</td>
+              <td colSpan={3} className="px-4 py-3 text-neutral-500 dark:text-gray-500 text-center">Taxable income is ₹0 — no tax</td>
             </tr>
           ) : (
             slabBreakdown.map((row, i) => (
-              <tr key={i} className="border-t border-neutral-100">
-                <td className="px-4 py-2 text-neutral-600">{row.label}</td>
-                <td className="px-3 py-2 text-right text-neutral-500 tabular-nums">{pct(row.rate)}</td>
-                <td className="px-4 py-2 text-right text-neutral-700 tabular-nums font-medium">{formatINR(row.tax)}</td>
+              <tr key={i} className="border-t border-neutral-100 dark:border-gray-700">
+                <td className="px-4 py-2 text-neutral-600 dark:text-gray-400">{row.label}</td>
+                <td className="px-3 py-2 text-right text-neutral-500 dark:text-gray-500 tabular-nums">{pct(row.rate)}</td>
+                <td className="px-4 py-2 text-right text-neutral-700 dark:text-gray-300 tabular-nums font-medium">{formatINR(row.tax)}</td>
               </tr>
             ))
           )}
         </tbody>
-        <tfoot className="border-t-2 border-neutral-200">
-          <tr className="bg-neutral-50">
-            <td className="px-4 py-2 text-neutral-600 font-medium" colSpan={2}>Subtotal</td>
-            <td className="px-4 py-2 text-right tabular-nums font-medium text-neutral-900">{formatINR(rawTax)}</td>
+        <tfoot className="border-t-2 border-neutral-200 dark:border-gray-600">
+          <tr className="bg-neutral-50 dark:bg-gray-750">
+            <td className="px-4 py-2 text-neutral-600 dark:text-gray-400 font-medium" colSpan={2}>Subtotal</td>
+            <td className="px-4 py-2 text-right tabular-nums font-medium text-neutral-900 dark:text-white">{formatINR(rawTax)}</td>
           </tr>
           {rebate > 0 && (
-            <tr className="border-t border-neutral-100">
-              <td className="px-4 py-2 text-neutral-600" colSpan={2}>Less: 87A Rebate</td>
+            <tr className="border-t border-neutral-100 dark:border-gray-700">
+              <td className="px-4 py-2 text-neutral-600 dark:text-gray-400" colSpan={2}>Less: 87A Rebate</td>
               <td className="px-4 py-2 text-right tabular-nums text-success font-medium">−{formatINR(rebate)}</td>
             </tr>
           )}
           {marginalRelief > 0 && (
-            <tr className="border-t border-neutral-100">
-              <td className="px-4 py-2 text-neutral-600" colSpan={2}>Less: Marginal Relief</td>
+            <tr className="border-t border-neutral-100 dark:border-gray-700">
+              <td className="px-4 py-2 text-neutral-600 dark:text-gray-400" colSpan={2}>Less: Marginal Relief</td>
               <td className="px-4 py-2 text-right tabular-nums text-success font-medium">−{formatINR(marginalRelief)}</td>
             </tr>
           )}
-          <tr className="border-t border-neutral-100">
-            <td className="px-4 py-2 text-neutral-600" colSpan={2}>Add: Cess (4%)</td>
-            <td className="px-4 py-2 text-right tabular-nums text-neutral-600">+{formatINR(cess)}</td>
+          <tr className="border-t border-neutral-100 dark:border-gray-700">
+            <td className="px-4 py-2 text-neutral-600 dark:text-gray-400" colSpan={2}>Add: Cess (4%)</td>
+            <td className="px-4 py-2 text-right tabular-nums text-neutral-600 dark:text-gray-400">+{formatINR(cess)}</td>
           </tr>
-          <tr className="border-t-2 border-neutral-300 bg-neutral-100">
-            <td className="px-4 py-2.5 font-bold text-neutral-900" colSpan={2}>Total Tax</td>
-            <td className="px-4 py-2.5 text-right font-bold tabular-nums text-neutral-900">{formatINR(totalTax)}</td>
+          <tr className="border-t-2 border-neutral-300 dark:border-gray-600 bg-neutral-100 dark:bg-gray-700">
+            <td className="px-4 py-2.5 font-bold text-neutral-900 dark:text-white" colSpan={2}>Total Tax</td>
+            <td className="px-4 py-2.5 text-right font-bold tabular-nums text-neutral-900 dark:text-white">{formatINR(totalTax)}</td>
           </tr>
-          <tr className="border-t border-neutral-200">
-            <td className="px-4 py-2 text-neutral-500" colSpan={2}>Monthly TDS (approx.)</td>
-            <td className="px-4 py-2 text-right tabular-nums text-neutral-500">{formatINR(monthlyTax)}</td>
+          <tr className="border-t border-neutral-200 dark:border-gray-700">
+            <td className="px-4 py-2 text-neutral-500 dark:text-gray-500" colSpan={2}>Monthly TDS (approx.)</td>
+            <td className="px-4 py-2 text-right tabular-nums text-neutral-500 dark:text-gray-500">{formatINR(monthlyTax)}</td>
           </tr>
         </tfoot>
       </table>
@@ -184,11 +181,11 @@ function SlabTable({ title, accent, slabBreakdown, rawTax, rebate, effectiveTax,
 
 function DeductionRow({ label, oldVal, newVal, bold }) {
   const cell = 'px-5 py-2.5 tabular-nums text-right text-sm'
-  const textOld = bold ? 'font-semibold text-neutral-900' : 'text-neutral-600'
-  const textNew = bold ? 'font-semibold text-neutral-900' : 'text-neutral-500'
+  const textOld = bold ? 'font-semibold text-neutral-900 dark:text-white' : 'text-neutral-600 dark:text-gray-400'
+  const textNew = bold ? 'font-semibold text-neutral-900 dark:text-white' : 'text-neutral-500 dark:text-gray-500'
   return (
-    <tr className="border-t border-neutral-100">
-      <td className={`px-5 py-2.5 text-sm ${bold ? 'font-semibold text-neutral-900' : 'text-neutral-600'}`}>{label}</td>
+    <tr className="border-t border-neutral-100 dark:border-gray-700">
+      <td className={`px-5 py-2.5 text-sm ${bold ? 'font-semibold text-neutral-900 dark:text-white' : 'text-neutral-600 dark:text-gray-400'}`}>{label}</td>
       <td className={`${cell} ${textOld}`}>{oldVal != null ? formatINR(oldVal) : '—'}</td>
       <td className={`${cell} ${textNew}`}>{newVal != null ? formatINR(newVal) : '—'}</td>
     </tr>
@@ -199,16 +196,16 @@ function FullComparisonTable({ or, nr, winner }) {
   const winnerIs = (regime) => winner === regime
 
   return (
-    <div className="bg-white rounded-2xl border border-neutral-300 shadow-panel overflow-hidden mb-6">
-      <div className="px-6 py-4 border-b border-neutral-300">
-        <h2 className="text-base font-semibold text-neutral-900">Deductions Comparison</h2>
+    <div className="bg-white dark:bg-gray-800 rounded-2xl border border-neutral-300 dark:border-gray-700 shadow-panel overflow-hidden mb-6">
+      <div className="px-6 py-4 border-b border-neutral-300 dark:border-gray-700">
+        <h2 className="text-base font-semibold text-neutral-900 dark:text-white">Deductions Comparison</h2>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className="bg-neutral-100 border-b border-neutral-200">
-              <th className="text-left px-5 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wide w-1/2">Item</th>
-              <th className="text-right px-5 py-3 text-xs font-semibold text-neutral-600 uppercase tracking-wide">Old Regime</th>
+            <tr className="bg-neutral-100 dark:bg-gray-700 border-b border-neutral-200 dark:border-gray-600">
+              <th className="text-left px-5 py-3 text-xs font-semibold text-neutral-500 dark:text-gray-400 uppercase tracking-wide w-1/2">Item</th>
+              <th className="text-right px-5 py-3 text-xs font-semibold text-neutral-600 dark:text-gray-300 uppercase tracking-wide">Old Regime</th>
               <th className="text-right px-5 py-3 text-xs font-semibold text-primary uppercase tracking-wide">New Regime</th>
             </tr>
           </thead>
@@ -229,18 +226,18 @@ function FullComparisonTable({ or, nr, winner }) {
             )}
           </tbody>
           <tfoot>
-            <tr className="border-t-2 border-neutral-200 bg-neutral-50">
-              <td className="px-5 py-3 text-sm font-semibold text-neutral-900">Total Deductions</td>
-              <td className="px-5 py-3 text-right text-sm font-semibold text-neutral-900 tabular-nums">{formatINR(or.totalDeductions)}</td>
-              <td className="px-5 py-3 text-right text-sm font-semibold text-neutral-900 tabular-nums">{formatINR(nr.totalDeductions)}</td>
+            <tr className="border-t-2 border-neutral-200 dark:border-gray-600 bg-neutral-50 dark:bg-gray-750">
+              <td className="px-5 py-3 text-sm font-semibold text-neutral-900 dark:text-white">Total Deductions</td>
+              <td className="px-5 py-3 text-right text-sm font-semibold text-neutral-900 dark:text-white tabular-nums">{formatINR(or.totalDeductions)}</td>
+              <td className="px-5 py-3 text-right text-sm font-semibold text-neutral-900 dark:text-white tabular-nums">{formatINR(nr.totalDeductions)}</td>
             </tr>
-            <tr className={`border-t-2 border-neutral-200 ${winnerIs('new') ? 'bg-success-light/50' : winnerIs('old') ? 'bg-primary-light/50' : 'bg-neutral-50'}`}>
-              <td className="px-5 py-3 text-sm font-bold text-neutral-900">Taxable Income</td>
-              <td className={`px-5 py-3 text-right text-sm font-bold tabular-nums ${winnerIs('old') ? 'text-primary' : 'text-neutral-900'}`}>
+            <tr className={`border-t-2 border-neutral-200 dark:border-gray-600 ${winnerIs('new') ? 'bg-success-light/50 dark:bg-success/10' : winnerIs('old') ? 'bg-primary-light/50 dark:bg-primary/10' : 'bg-neutral-50 dark:bg-gray-750'}`}>
+              <td className="px-5 py-3 text-sm font-bold text-neutral-900 dark:text-white">Taxable Income</td>
+              <td className={`px-5 py-3 text-right text-sm font-bold tabular-nums ${winnerIs('old') ? 'text-primary' : 'text-neutral-900 dark:text-white'}`}>
                 {formatINR(or.taxableIncome)}
                 {winnerIs('old') && <span className="ml-1.5 text-xs font-semibold bg-primary-light text-primary px-1.5 py-0.5 rounded-full">Lower</span>}
               </td>
-              <td className={`px-5 py-3 text-right text-sm font-bold tabular-nums ${winnerIs('new') ? 'text-success' : 'text-neutral-900'}`}>
+              <td className={`px-5 py-3 text-right text-sm font-bold tabular-nums ${winnerIs('new') ? 'text-success' : 'text-neutral-900 dark:text-white'}`}>
                 {formatINR(nr.taxableIncome)}
                 {winnerIs('new') && <span className="ml-1.5 text-xs font-semibold bg-success-light text-success px-1.5 py-0.5 rounded-full">Lower</span>}
               </td>
@@ -261,9 +258,9 @@ export default function ResultsPage() {
 
   if (!result) {
     return (
-      <div className="min-h-screen bg-neutral-100 flex items-center justify-center">
-        <div className="text-center bg-white rounded-2xl border border-neutral-300 shadow-panel p-10">
-          <p className="text-neutral-600 mb-5">No data entered yet — please complete the calculator first.</p>
+      <div className="min-h-screen bg-neutral-100 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-center bg-white dark:bg-gray-800 rounded-2xl border border-neutral-300 dark:border-gray-700 shadow-panel p-10">
+          <p className="text-neutral-600 dark:text-gray-400 mb-5">No data entered yet — please complete the calculator first.</p>
           <Link to="/calculator" className="inline-flex items-center gap-2 bg-primary text-white font-semibold px-6 py-3 rounded-xl text-sm">
             Go to Calculator →
           </Link>
@@ -282,12 +279,12 @@ export default function ResultsPage() {
     : winner === 'old' ? `Go with the Old Regime. You save ${formatINR(savings)} this year.`
     : 'Both regimes result in the same tax for you.'
 
-  const bannerBg   = winner === 'new' ? 'bg-success-light border-success/20' : winner === 'old' ? 'bg-primary-light border-primary/20' : 'bg-neutral-100 border-neutral-300'
-  const accentText = winner === 'new' ? 'text-success' : winner === 'old' ? 'text-primary' : 'text-neutral-900'
+  const bannerBg   = winner === 'new' ? 'bg-success-light border-success/20 dark:bg-success/10 dark:border-success/30' : winner === 'old' ? 'bg-primary-light border-primary/20 dark:bg-primary/10 dark:border-primary/30' : 'bg-neutral-100 dark:bg-gray-800 border-neutral-300 dark:border-gray-700'
+  const accentText = winner === 'new' ? 'text-success' : winner === 'old' ? 'text-primary' : 'text-neutral-900 dark:text-white'
   const iconBg     = winner === 'new' ? 'bg-success' : winner === 'old' ? 'bg-primary' : 'bg-neutral-500'
 
   return (
-    <div className="min-h-screen bg-neutral-100">
+    <div className="min-h-screen bg-neutral-100 dark:bg-gray-900">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         {/* Nav */}
@@ -296,9 +293,12 @@ export default function ResultsPage() {
             <div className="w-7 h-7 bg-primary rounded-lg flex items-center justify-center">
               <span className="text-white text-xs font-bold">₹</span>
             </div>
-            <span className="font-semibold text-neutral-900 text-sm">TaxCompare</span>
+            <span className="font-semibold text-neutral-900 dark:text-white text-sm">TaxCompare</span>
           </Link>
-          <span className="text-neutral-600 text-xs bg-white border border-neutral-300 rounded-full px-3 py-1">FY 2025-26</span>
+          <div className="flex items-center gap-3">
+            <span className="text-neutral-600 dark:text-gray-400 text-xs bg-white dark:bg-gray-800 border border-neutral-300 dark:border-gray-700 rounded-full px-3 py-1">FY 2025-26</span>
+            <ThemeToggle />
+          </div>
         </div>
 
         {/* 1 — Verdict Banner */}
@@ -311,11 +311,11 @@ export default function ResultsPage() {
             </div>
             <div>
               <h1 className={`text-xl font-bold leading-snug ${accentText}`}>{headline}</h1>
-              <p className="text-neutral-600 text-sm mt-1">
+              <p className="text-neutral-600 dark:text-gray-400 text-sm mt-1">
                 Based on estimated gross salary of {formatINR(nr.grossSalary)} / year
               </p>
               {reason && (
-                <p className="text-neutral-600 text-xs mt-2 leading-relaxed">{reason}</p>
+                <p className="text-neutral-600 dark:text-gray-400 text-xs mt-2 leading-relaxed">{reason}</p>
               )}
             </div>
           </div>
@@ -326,7 +326,7 @@ export default function ResultsPage() {
 
         {/* 3 — Slab breakdown */}
         <div className="mb-6">
-          <h2 className="text-base font-semibold text-neutral-900 mb-3">Tax Calculation Breakdown</h2>
+          <h2 className="text-base font-semibold text-neutral-900 dark:text-white mb-3">Tax Calculation Breakdown</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <SlabTable
               title="Old Regime"
@@ -354,17 +354,17 @@ export default function ResultsPage() {
         </div>
 
         {/* 4 — Explanation */}
-        <div className="bg-white rounded-2xl border border-neutral-300 shadow-panel p-6 mb-6">
-          <h2 className="text-base font-semibold text-neutral-900 mb-3">How this works for you</h2>
-          <div className="space-y-2.5 text-sm text-neutral-600 leading-relaxed">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-neutral-300 dark:border-gray-700 shadow-panel p-6 mb-6">
+          <h2 className="text-base font-semibold text-neutral-900 dark:text-white mb-3">How this works for you</h2>
+          <div className="space-y-2.5 text-sm text-neutral-600 dark:text-gray-400 leading-relaxed">
             <p>
               Your estimated annual salary is{' '}
-              <strong className="text-neutral-900">{formatINR(or.grossSalary)}</strong>.
+              <strong className="text-neutral-900 dark:text-white">{formatINR(or.grossSalary)}</strong>.
               Under the Old Regime, your total deductions come to{' '}
-              <strong className="text-neutral-900">{formatINR(or.totalDeductions)}</strong>, bringing taxable income down to{' '}
-              <strong className="text-neutral-900">{formatINR(or.taxableIncome)}</strong>.
+              <strong className="text-neutral-900 dark:text-white">{formatINR(or.totalDeductions)}</strong>, bringing taxable income down to{' '}
+              <strong className="text-neutral-900 dark:text-white">{formatINR(or.taxableIncome)}</strong>.
               Under the New Regime, with only a ₹75,000 standard deduction, taxable income is{' '}
-              <strong className="text-neutral-900">{formatINR(nr.taxableIncome)}</strong>.
+              <strong className="text-neutral-900 dark:text-white">{formatINR(nr.taxableIncome)}</strong>.
             </p>
             {winner !== 'tie' && (
               <p>
@@ -380,7 +380,7 @@ export default function ResultsPage() {
                 The biggest factors in your Old Regime calculation:{' '}
                 {topDeductions.map((d, i) => (
                   <span key={d.label}>
-                    <strong className="text-neutral-900">{d.label}</strong>{' '}
+                    <strong className="text-neutral-900 dark:text-white">{d.label}</strong>{' '}
                     <span className="tabular-nums">({formatINR(d.value)})</span>
                     {i < topDeductions.length - 1 ? ' and ' : ''}
                   </span>
@@ -392,15 +392,15 @@ export default function ResultsPage() {
 
         {/* 5 — Suggestions */}
         {suggestions.length > 0 && (
-          <div className="bg-white rounded-2xl border border-neutral-300 shadow-panel p-6 mb-6">
-            <h2 className="text-base font-semibold text-neutral-900 mb-4">Actionable suggestions for you</h2>
+          <div className="bg-white dark:bg-gray-800 rounded-2xl border border-neutral-300 dark:border-gray-700 shadow-panel p-6 mb-6">
+            <h2 className="text-base font-semibold text-neutral-900 dark:text-white mb-4">Actionable suggestions for you</h2>
             <ol className="space-y-4">
               {suggestions.map((text, i) => (
                 <li key={i} className="flex gap-3">
                   <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary-light text-primary text-xs font-bold flex items-center justify-center mt-0.5">
                     {i + 1}
                   </span>
-                  <p className="text-sm text-neutral-600 leading-relaxed">{text}</p>
+                  <p className="text-sm text-neutral-600 dark:text-gray-400 leading-relaxed">{text}</p>
                 </li>
               ))}
             </ol>

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import ThemeToggle from '../components/ThemeToggle'
 
 function ShieldIcon() {
   return (
@@ -26,10 +27,10 @@ function ScaleIcon() {
 
 function SampleResultCard() {
   return (
-    <div className="relative bg-white rounded-2xl shadow-panel border border-neutral-300 p-6 overflow-hidden">
+    <div className="relative bg-white dark:bg-gray-800 rounded-2xl shadow-panel border border-neutral-300 dark:border-gray-700 p-6 overflow-hidden">
       {/* Watermark badge */}
       <div className="absolute top-4 right-4">
-        <span className="bg-neutral-100 text-neutral-600 text-xs font-semibold px-2.5 py-1 rounded-full border border-neutral-300 tracking-wide uppercase">
+        <span className="bg-neutral-100 dark:bg-gray-700 text-neutral-600 dark:text-gray-400 text-xs font-semibold px-2.5 py-1 rounded-full border border-neutral-300 dark:border-gray-600 tracking-wide uppercase">
           Sample Result
         </span>
       </div>
@@ -51,10 +52,10 @@ function SampleResultCard() {
       </div>
 
       {/* Comparison table */}
-      <div className="border border-neutral-300 rounded-xl overflow-hidden text-sm">
-        <div className="grid grid-cols-3 bg-neutral-100 px-3 py-2">
-          <span className="text-neutral-600 font-medium text-xs uppercase tracking-wide"></span>
-          <span className="text-center text-neutral-600 font-semibold text-xs">Old Regime</span>
+      <div className="border border-neutral-300 dark:border-gray-700 rounded-xl overflow-hidden text-sm">
+        <div className="grid grid-cols-3 bg-neutral-100 dark:bg-gray-700 px-3 py-2">
+          <span className="text-neutral-600 dark:text-gray-400 font-medium text-xs uppercase tracking-wide"></span>
+          <span className="text-center text-neutral-600 dark:text-gray-400 font-semibold text-xs">Old Regime</span>
           <span className="text-center text-primary font-semibold text-xs">New Regime</span>
         </div>
         {[
@@ -65,16 +66,16 @@ function SampleResultCard() {
         ].map((row, i) => (
           <div
             key={i}
-            className={`grid grid-cols-3 px-3 py-2 border-t border-neutral-300 ${row.highlight ? 'bg-primary-light' : ''}`}
+            className={`grid grid-cols-3 px-3 py-2 border-t border-neutral-300 dark:border-gray-700 ${row.highlight ? 'bg-primary-light dark:bg-primary/10' : ''}`}
           >
-            <span className={`text-neutral-600 text-xs ${row.highlight ? 'font-semibold text-neutral-900' : ''}`}>{row.label}</span>
-            <span className={`text-center text-xs ${row.highlight ? 'font-bold text-neutral-900 line-through decoration-warning' : 'text-neutral-600'}`}>{row.old}</span>
-            <span className={`text-center text-xs ${row.highlight ? 'font-bold text-primary' : 'text-neutral-600'}`}>{row.newVal}</span>
+            <span className={`text-xs ${row.highlight ? 'font-semibold text-neutral-900 dark:text-white' : 'text-neutral-600 dark:text-gray-400'}`}>{row.label}</span>
+            <span className={`text-center text-xs ${row.highlight ? 'font-bold text-neutral-900 dark:text-white line-through decoration-warning' : 'text-neutral-600 dark:text-gray-400'}`}>{row.old}</span>
+            <span className={`text-center text-xs ${row.highlight ? 'font-bold text-primary' : 'text-neutral-600 dark:text-gray-400'}`}>{row.newVal}</span>
           </div>
         ))}
       </div>
 
-      <p className="text-neutral-600 text-xs mt-3 text-center italic">
+      <p className="text-neutral-600 dark:text-gray-500 text-xs mt-3 text-center italic">
         Based on ₹15L salary, metro city, standard deductions
       </p>
     </div>
@@ -83,7 +84,7 @@ function SampleResultCard() {
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/40 to-indigo-100/50 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/40 to-indigo-100/50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-900 relative overflow-hidden">
       {/* Decorative background shapes */}
       <div className="absolute top-[-80px] right-[-80px] w-[400px] h-[400px] rounded-full bg-primary/5 blur-3xl pointer-events-none" />
       <div className="absolute bottom-[-100px] left-[-60px] w-[350px] h-[350px] rounded-full bg-indigo-300/10 blur-3xl pointer-events-none" />
@@ -95,11 +96,14 @@ export default function LandingPage() {
             <div className="w-7 h-7 bg-primary rounded-lg flex items-center justify-center">
               <span className="text-white text-xs font-bold">₹</span>
             </div>
-            <span className="font-semibold text-neutral-900 text-sm">TaxCompare</span>
+            <span className="font-semibold text-neutral-900 dark:text-white text-sm">TaxCompare</span>
           </div>
-          <span className="text-neutral-600 text-xs bg-white/70 border border-neutral-300 rounded-full px-3 py-1">
-            FY 2025-26 (AY 2026-27)
-          </span>
+          <div className="flex items-center gap-3">
+            <span className="text-neutral-600 dark:text-gray-400 text-xs bg-white/70 dark:bg-gray-800/70 border border-neutral-300 dark:border-gray-700 rounded-full px-3 py-1">
+              FY 2025-26 (AY 2026-27)
+            </span>
+            <ThemeToggle />
+          </div>
         </header>
 
         {/* Hero section */}
@@ -111,13 +115,13 @@ export default function LandingPage() {
               <span className="text-primary text-xs font-semibold">Updated for Budget 2025</span>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl font-bold text-neutral-900 leading-[1.15] tracking-tight mb-5">
+            <h1 className="text-4xl sm:text-5xl font-bold text-neutral-900 dark:text-white leading-[1.15] tracking-tight mb-5">
               Which tax regime
               <span className="text-primary"> saves you more</span>{' '}
               money?
             </h1>
 
-            <p className="text-lg text-neutral-600 leading-relaxed mb-8 max-w-lg">
+            <p className="text-lg text-neutral-600 dark:text-gray-400 leading-relaxed mb-8 max-w-lg">
               Tell us your monthly salary. We'll do the math — for free, in under 2 minutes.
             </p>
 
@@ -130,10 +134,10 @@ export default function LandingPage() {
               ].map((badge, i) => (
                 <div
                   key={i}
-                  className="flex items-center gap-2 bg-white/80 border border-neutral-300 rounded-xl px-3 py-2.5 flex-1 shadow-sm"
+                  className="flex items-center gap-2 bg-white/80 dark:bg-gray-800/80 border border-neutral-300 dark:border-gray-700 rounded-xl px-3 py-2.5 flex-1 shadow-sm"
                 >
                   {badge.icon}
-                  <span className="text-neutral-900 text-xs font-medium leading-tight">{badge.text}</span>
+                  <span className="text-neutral-900 dark:text-gray-200 text-xs font-medium leading-tight">{badge.text}</span>
                 </div>
               ))}
             </div>
@@ -149,7 +153,7 @@ export default function LandingPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                 </svg>
               </Link>
-              <p className="text-neutral-600 text-sm">
+              <p className="text-neutral-600 dark:text-gray-400 text-sm">
                 No sign-up. No email. No data stored.
               </p>
             </div>
@@ -162,11 +166,11 @@ export default function LandingPage() {
         </div>
 
         {/* Footer strip */}
-        <div className="border-t border-neutral-300/60 py-5 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <p className="text-neutral-600 text-xs">
+        <div className="border-t border-neutral-300/60 dark:border-gray-700 py-5 flex flex-col sm:flex-row items-center justify-between gap-2">
+          <p className="text-neutral-600 dark:text-gray-500 text-xs">
             Tax data sourced from Income Tax Department of India · Budget 2025
           </p>
-          <p className="text-neutral-600 text-xs">
+          <p className="text-neutral-600 dark:text-gray-500 text-xs">
             For salaried individuals · FY 2025-26 only
           </p>
         </div>

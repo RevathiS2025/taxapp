@@ -11,6 +11,7 @@ import Step8 from '../components/wizard/Step8'
 import Step9 from '../components/wizard/Step9'
 import LivePreview from '../components/LivePreview'
 import MobileEstimateSheet from '../components/MobileEstimateSheet'
+import ThemeToggle from '../components/ThemeToggle'
 
 const TOTAL_STEPS = 9
 
@@ -18,7 +19,6 @@ export default function CalculatorPage() {
   const navigate = useNavigate()
   const [currentStep, setCurrentStep] = useState(1)
 
-  // Scroll to top and announce step change to screen readers
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [currentStep])
@@ -40,7 +40,7 @@ export default function CalculatorPage() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-100">
+    <div className="min-h-screen bg-neutral-100 dark:bg-gray-900">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Nav */}
         <div className="flex items-center justify-between mb-8">
@@ -48,19 +48,22 @@ export default function CalculatorPage() {
             <div className="w-7 h-7 bg-primary rounded-lg flex items-center justify-center" aria-hidden="true">
               <span className="text-white text-xs font-bold">₹</span>
             </div>
-            <span className="font-semibold text-neutral-900 text-sm">TaxCompare</span>
+            <span className="font-semibold text-neutral-900 dark:text-white text-sm">TaxCompare</span>
           </Link>
-          <span className="text-neutral-600 text-xs bg-white border border-neutral-300 rounded-full px-3 py-1">
-            FY 2025-26
-          </span>
+          <div className="flex items-center gap-3">
+            <span className="text-neutral-600 dark:text-gray-400 text-xs bg-white dark:bg-gray-800 border border-neutral-300 dark:border-gray-700 rounded-full px-3 py-1">
+              FY 2025-26
+            </span>
+            <ThemeToggle />
+          </div>
         </div>
 
         {/* Two-column layout: wizard left, preview right */}
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-10 items-start">
-          {/* Wizard column — pb-20 on mobile leaves room above the bottom bar */}
+          {/* Wizard column */}
           <div className="w-full lg:flex-1 lg:max-w-[640px] pb-20 lg:pb-0">
             <main>
-              <div className="bg-white rounded-2xl border border-neutral-300 shadow-panel p-8">
+              <div className="bg-white dark:bg-gray-800 rounded-2xl border border-neutral-300 dark:border-gray-700 shadow-panel p-8">
                 {currentStep === 1 && <Step1 onNext={handleNext} onBack={handleBack} />}
                 {currentStep === 2 && <Step2 onNext={handleNext} onBack={handleBack} />}
                 {currentStep === 3 && <Step3 onNext={handleNext} onBack={handleBack} />}
@@ -74,7 +77,7 @@ export default function CalculatorPage() {
             </main>
           </div>
 
-          {/* Live preview — desktop sidebar only, hidden on mobile */}
+          {/* Live preview — desktop sidebar only */}
           <div className="hidden lg:block lg:w-[360px] lg:flex-none">
             <div className="lg:sticky lg:top-6">
               <LivePreview />

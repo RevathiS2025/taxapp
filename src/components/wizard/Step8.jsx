@@ -55,20 +55,20 @@ export default function Step8({ onNext, onBack }) {
       <ProgressDots current={8} />
 
       <div className="mt-8">
-        <h2 className="text-[28px] font-bold text-neutral-900 leading-tight">
+        <h2 className="text-[28px] font-bold text-neutral-900 dark:text-white leading-tight">
           Any other income or deductions?
         </h2>
-        <p className="mt-3 text-sm text-neutral-600 leading-relaxed">
+        <p className="mt-3 text-sm text-neutral-600 dark:text-gray-400 leading-relaxed">
           A few more details to make your comparison accurate.
         </p>
       </div>
 
       {/* Savings interest */}
       <div className="mt-8">
-        <p className="text-sm font-semibold text-neutral-900 mb-1">
+        <p className="text-sm font-semibold text-neutral-900 dark:text-white mb-1">
           Do you earn interest from savings accounts or FDs?
         </p>
-        <p className="text-xs text-neutral-500 mb-3">
+        <p className="text-xs text-neutral-500 dark:text-gray-500 mb-3">
           Under the Old Regime, up to ₹10,000 is deductible (₹50,000 for senior citizens via 80TTB).
         </p>
         <div className="flex gap-3 flex-wrap">
@@ -81,7 +81,7 @@ export default function Step8({ onNext, onBack }) {
         </div>
         {hasSavingsInterest === true && (
           <div className="mt-4">
-            <label htmlFor="savings-interest" className="block text-sm font-semibold text-neutral-900 mb-2">
+            <label htmlFor="savings-interest" className="block text-sm font-semibold text-neutral-900 dark:text-white mb-2">
               Annual savings / FD interest income
             </label>
             <CurrencyInput
@@ -96,9 +96,9 @@ export default function Step8({ onNext, onBack }) {
       </div>
 
       {/* Professional tax */}
-      <div className="mt-8 pt-6 border-t border-neutral-200">
+      <div className="mt-8 pt-6 border-t border-neutral-200 dark:border-gray-700">
         <div className="flex items-center justify-between mb-1">
-          <p className="text-sm font-semibold text-neutral-900">Professional tax</p>
+          <p className="text-sm font-semibold text-neutral-900 dark:text-white">Professional tax</p>
           {!editingProfTax && (
             <button
               type="button"
@@ -109,7 +109,7 @@ export default function Step8({ onNext, onBack }) {
             </button>
           )}
         </div>
-        <p className="text-xs text-neutral-500 mb-3">
+        <p className="text-xs text-neutral-500 dark:text-gray-500 mb-3">
           Most salaried employees pay ₹2,400/year (₹200/month). Only change if your state is different.
         </p>
         {editingProfTax ? (
@@ -126,15 +126,15 @@ export default function Step8({ onNext, onBack }) {
             <button
               type="button"
               onClick={() => setEditingProfTax(false)}
-              className="mt-0.5 text-xs text-neutral-600 font-medium hover:text-neutral-900 border border-neutral-300 rounded-lg px-3 py-2.5"
+              className="mt-0.5 text-xs text-neutral-600 dark:text-gray-400 font-medium hover:text-neutral-900 dark:hover:text-white border border-neutral-300 dark:border-gray-600 rounded-lg px-3 py-2.5"
             >
               Done
             </button>
           </div>
         ) : (
-          <div className="flex items-center gap-2 px-4 py-2.5 bg-neutral-100 rounded-xl border border-neutral-200 w-fit">
-            <span className="text-sm font-semibold text-neutral-900">₹{profTax.toLocaleString('en-IN')}</span>
-            <span className="text-xs text-neutral-500">/ year</span>
+          <div className="flex items-center gap-2 px-4 py-2.5 bg-neutral-100 dark:bg-gray-700 rounded-xl border border-neutral-200 dark:border-gray-600 w-fit">
+            <span className="text-sm font-semibold text-neutral-900 dark:text-white">₹{profTax.toLocaleString('en-IN')}</span>
+            <span className="text-xs text-neutral-500 dark:text-gray-500">/ year</span>
           </div>
         )}
       </div>
